@@ -49,8 +49,28 @@ pub enum BamAnomaly {
 /// Audit decoded BAM/DAM records for graded anomalies (may be empty).
 #[must_use]
 pub fn audit(entries: &[BamEntry]) -> Vec<BamAnomaly> {
-    let _ = entries;
-    Vec::new()
+    let mut out = Vec::new();
+    for e in entries {
+        // BAM stores kernel device paths; strip the volume prefix so the shared heuristics see a
+        // normal Windows path. The finding keeps the verbatim path BAM recorded.
+        let norm = normalize_device_path(&e.path);
+        let name = base_name(norm);
+        let upper = norm.to_uppercase();
+        let in_system = upper.contains(r"\SYSTEM32\") || upper.contains(r"\SYSWOW64\");
+        if forensicnomicon::processes::is_system32_binary(&name) && !in_system {
+            out.push(BamAnomaly::SystemBinaryRelocated {
+                name: name.to_uppercase(),
+                path: e.path.clone(),
+            });
+        }
+        if forensicnomicon::heuristics::paths::is_suspicious_exec_path(norm) {
+            out.push(BamAnomaly::SuspiciousPath {
+                name,
+                path: e.path.clone(),
+            });
+        }
+    }
+    out
 }
 
 /// Strip a leading `\Device\HarddiskVolumeN` prefix from a BAM path, returning the remainder from
