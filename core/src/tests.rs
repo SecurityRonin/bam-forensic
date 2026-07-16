@@ -10,7 +10,7 @@ use super::*;
 /// (Windows 10 writes 16 trailing bytes, for a 24-byte value).
 fn value(filetime: u64, pad: usize) -> Vec<u8> {
     let mut v = filetime.to_le_bytes().to_vec();
-    v.extend(std::iter::repeat(0u8).take(pad));
+    v.extend(std::iter::repeat_n(0u8, pad));
     v
 }
 
