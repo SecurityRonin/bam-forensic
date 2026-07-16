@@ -53,8 +53,15 @@ pub struct BamEntry {
 /// data (e.g. the 4-byte `SequenceNumber`/`Version` metadata values). Never panics.
 #[must_use]
 pub fn decode_entry(value_name: &str, value_data: &[u8]) -> Option<BamEntry> {
-    let _ = (value_name, value_data);
-    None
+    if value_name.is_empty() {
+        return None;
+    }
+    let bytes = value_data.get(..8)?;
+    let last_executed_filetime = u64::from_le_bytes(bytes.try_into().ok()?);
+    Some(BamEntry {
+        path: value_name.to_string(),
+        last_executed_filetime,
+    })
 }
 
 #[cfg(test)]
