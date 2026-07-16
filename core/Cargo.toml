@@ -1,0 +1,18 @@
+[package]
+name = "bam-core"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Pure-Rust read-only decoder for the Windows Background Activity Moderator (BAM/DAM) execution-evidence record — decodes a bam State value (executable path + last-execution FILETIME) from its value name and raw bytes. No hive I/O; panic-free."
+license.workspace = true
+authors.workspace = true
+keywords = ["forensics", "bam", "windows", "dfir", "execution"]
+categories = ["parser-implementations"]
+repository.workspace = true
+readme.workspace = true
+exclude = ["tests/data/", "fuzz/"]
+
+[dependencies]
+
+[lints]
+workspace = true

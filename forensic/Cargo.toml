@@ -1,0 +1,20 @@
+[package]
+name = "bam-forensic"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Windows Background Activity Moderator (BAM/DAM) forensic analyzer — reports last-execution times per executable per user SID from the SYSTEM hive, with graded findings (masquerading, staging-directory execution), plus the bam4n6 CLI."
+license.workspace = true
+authors.workspace = true
+keywords = ["forensics", "bam", "windows", "dfir", "execution"]
+categories = ["command-line-utilities", "parser-implementations"]
+repository.workspace = true
+readme.workspace = true
+
+[dependencies]
+bam-core = { workspace = true }
+winreg-core = { workspace = true }
+forensicnomicon = { workspace = true }
+
+[lints]
+workspace = true
